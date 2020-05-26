@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" id="cordova-plugin-zendesk-sdk" version="1.0.0">
+  <name>cordova-plugin-zendesk-sdk</name>
+  <description>Cordova pluging for Zendesk SDK</description>
+  <license>MIT License</license>
+  <keywords>cordova,zendesk,ecosystem:cordova,cordova-ios,cordova-android</keywords>
+  <repo>https://github.com/lonwi/cordova-plugin-zendesk-sdk.git</repo>
+  <issue>https://github.com/lonwi/cordova-plugin-zendesk-sdk/issues</issue>
+  <author>Wojciech Bubolka</author>
+
+
+  <js-module src="www/Zendesk.js" name="Zendesk">
+    <clobbers target="Zendesk" />
+  </js-module>
+
+  <engines>
+    <engine name="cordova" version=">=9.0.0"/>
+    <engine name="cordova-android" version=">=8.0.0"/>
+    <engine name="cordova-ios" version=">=5.0.0"/>
+  </engines>
+
+  <!-- ios -->
+  <platform name="ios">
+    <config-file target="config.xml" parent="/*">
+      <feature name="Zendesk">
+        <param name="ios-package" value="Zendesk" />
+      </feature>
+    </config-file>
+
+    <header-file src="src/ios/Zendesk.h" />
+    <source-file src="src/ios/Zendesk.m" />
+
+    <podspec>
+      <config>
+        <source url="https://cdn.cocoapods.org/"/>
+      </config>
+      <pods>
+        <pod name="ZendeskSupportSDK" spec="~> 5.0.4" />
+      </pods>
+    </podspec>
+  </platform>
+
+  <!-- android -->
+  <platform name="android">
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="Zendesk">
+        <param name="android-package" value="info.lonwi.cordova.plugin.zendesk.Zendesk" />
+        <param name="onload" value="true" />
+      </feature>
+    </config-file>
+
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+      <activity
+        android:name="zendesk.support.guide.HelpCenterActivity"
+        android:theme="@style/Base.Theme.AppCompat" />
+      <activity
+        android:name="zendesk.support.guide.ViewArticleActivity"
+        android:theme="@style/Base.Theme.AppCompat" />
+      <activity
+        android:name="zendesk.support.requestlist.RequestListActivity"
+        android:theme="@style/Base.Theme.AppCompat" />
+      <activity
+        android:name="zendesk.support.request.RequestActivity"
+        android:theme="@style/Base.Theme.AppCompat" />
+    </config-file>
+
+    <source-file src="src/android/Zendesk.java" target-dir="src/info/lonwi/cordova/plugin/zendesk/" />
+    <framework src="src/android/zendesk.gradle" custom="true" type="gradleReference" />
+  </platform>
+
+</plugin>
