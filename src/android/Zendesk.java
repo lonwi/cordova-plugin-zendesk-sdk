@@ -25,136 +25,146 @@ import zendesk.support.requestlist.RequestListActivity;
 import zendesk.support.requestlist.RequestListActivity;
 
 public class Zendesk extends CordovaPlugin {
-  private static final String ACTION_INITIALIZE = "initialize";
-  private static final String ACTION_SET_ANONYMOUS_IDENTITY = "setAnonymousIdentity";
-  private static final String ACTION_SHOW_HELP_CENTER = "showHelpCenter";
-  private static final String ACTION_SHOW_HELP_CENTER_ARTICLE = "showHelpCenterArticle";
-  private static final String ACTION_SHOW_TICKET_REQUEST = "showTicketRequest";
-  private static final String ACTION_SHOW_USER_TICKETS = "showUserTickets";
 
-  @Override
-  public boolean execute(String action, CordovaArgs args, CallbackContext callbackContext)
-    throws JSONException {
-    if (ACTION_INITIALIZE.equals(action)) {
-      String appId = args.getString(0);
-      String clientId = args.getString(1);
-      String zendeskUrl = args.getString(2);
+    private static final String TAG = "Zendesk";
+    private static final String ACTION_INITIALIZE = "initialize";
+    private static final String ACTION_SET_ANONYMOUS_IDENTITY = "setAnonymousIdentity";
+    private static final String ACTION_SHOW_HELP_CENTER = "showHelpCenter";
+    private static final String ACTION_SHOW_HELP_CENTER_ARTICLE = "showHelpCenterArticle";
+    private static final String ACTION_SHOW_TICKET_REQUEST = "showTicketRequest";
+    private static final String ACTION_SHOW_USER_TICKETS = "showUserTickets";
 
-      zendesk.core.Zendesk.INSTANCE.init(this.getContext(), zendeskUrl, appId, clientId);
-      Support.INSTANCE.init(zendesk.core.Zendesk.INSTANCE);
-    } else if (ACTION_SET_ANONYMOUS_IDENTITY.equals(action)) {
-      String name = args.getString(0);
-      String email = args.getString(1);
+    @Override
+    public boolean execute(String action, CordovaArgs args, CallbackContext callbackContext) throws JSONException {
 
-      Identity identity = new AnonymousIdentity.Builder()
-        .withNameIdentifier(name)
-        .withEmailIdentifier(email)
-        .build();
+        switch(action) {
+            case ACTION_INITIALIZE:
+                Log.d(TAG, "Starting Zendesk plugin");
+                String appId = args.getString(0);
+                String clientId = args.getString(1);
+                String zendeskUrl = args.getString(2);
 
-      zendesk.core.Zendesk.INSTANCE.setIdentity(identity);
-    } else if (ACTION_SHOW_HELP_CENTER.equals(action)) {
-      String groupType = args.getString(0);
-      List<Long> groupIds;
-      List<String> labels;
+                zendesk.core.Zendesk.INSTANCE.init(this.getContext(), zendeskUrl, appId, clientId);
+                Support.INSTANCE.init(zendesk.core.Zendesk.INSTANCE);
+                break;
+            case ACTION_SET_ANONYMOUS_IDENTITY:
+                String name = args.getString(0);
+                String email = args.getString(1);
 
-      if (!args.isNull(1)) {
-        groupIds = jsonArrayToList(args.getJSONArray(1));
-      } else {
-        groupIds = new ArrayList<>();
-      }
+                Identity identity = new AnonymousIdentity.Builder()
+                  .withNameIdentifier(name)
+                  .withEmailIdentifier(email)
+                  .build();
 
-      if (!args.isNull(2)) {
-        labels = jsonArrayToList(args.getJSONArray(2));
-      } else {
-        labels = new ArrayList<>();
-      }
+                zendesk.core.Zendesk.INSTANCE.setIdentity(identity);
 
-      zendesk.support.guide.HelpCenterUiConfig.Builder helpCenterActivityBuilder = HelpCenterActivity.builder();
+                break;
+            case ACTION_SHOW_HELP_CENTER:
+                String groupType = args.getString(0);
+                List<Long> groupIds;
+                List<String> labels;
 
-      if ("category".equals(groupType) && !groupIds.isEmpty()) {
-        helpCenterActivityBuilder = helpCenterActivityBuilder.withArticlesForCategoryIds(groupIds);
-      } else if ("section".equals(groupType) && !groupIds.isEmpty()) {
-        helpCenterActivityBuilder = helpCenterActivityBuilder.withArticlesForSectionIds(groupIds);
-      }
 
-      if (labels.size() > 0) {
-        helpCenterActivityBuilder = helpCenterActivityBuilder.withLabelNames(labels);
-      }
+                if (!args.isNull(1)) {
+                  groupIds = jsonArrayToList(args.getJSONArray(1));
+                } else {
+                  groupIds = new ArrayList<>();
+                }
 
-      helpCenterActivityBuilder.show(this.cordova.getActivity());
-    } else if (ACTION_SHOW_HELP_CENTER_ARTICLE.equals(action)) {
-      String articleId = args.getString(0);
-      ViewArticleActivity.builder(Long.parseLong(articleId)).show(this.cordova.getActivity());
-    } else if (ACTION_SHOW_TICKET_REQUEST.equals(action)) {
-      String subject = args.getString(0);
-      List<String> tags;
-      List<String> fields;
+                if (!args.isNull(2)) {
+                  labels = jsonArrayToList(args.getJSONArray(2));
+                } else {
+                  labels = new ArrayList<>();
+                }
 
-      if (!args.isNull(1)) {
-        tags = jsonArrayToList(args.getJSONArray(1));
-      } else {
-        tags = new ArrayList<>();
-      }
+                zendesk.support.guide.HelpCenterUiConfig.Builder helpCenterActivityBuilder = HelpCenterActivity.builder();
 
-      if (!args.isNull(2)) {
-        fields = jsonArrayToList(args.getJSONArray(2));
-      } else {
-        fields = new ArrayList<>();
-      }
+                if ("category".equals(groupType) && !groupIds.isEmpty()) {
+                  helpCenterActivityBuilder = helpCenterActivityBuilder.withArticlesForCategoryIds(groupIds);
+                } else if ("section".equals(groupType) && !groupIds.isEmpty()) {
+                  helpCenterActivityBuilder = helpCenterActivityBuilder.withArticlesForSectionIds(groupIds);
+                }
 
-      RequestUiConfig.Builder requestActivityBuilder = RequestActivity.builder();
+                if (labels.size() > 0) {
+                  helpCenterActivityBuilder = helpCenterActivityBuilder.withLabelNames(labels);
+                }
 
-      if (subject != null) {
-        requestActivityBuilder = requestActivityBuilder.withRequestSubject(subject);
-      }
+                helpCenterActivityBuilder.show(this.cordova.getActivity());
+                break;
+            case ACTION_SHOW_HELP_CENTER_ARTICLE:
+                String articleId = args.getString(0);
+                ViewArticleActivity.builder(Long.parseLong(articleId)).show(this.cordova.getActivity());
+                break;
+            case ACTION_SHOW_TICKET_REQUEST:
+                String subject = args.getString(0);
+                List<String> tags;
+                List<String> fields;
 
-      if (!tags.isEmpty()) {
-        requestActivityBuilder = requestActivityBuilder.withTags(tags);
-      }
+                if (!args.isNull(1)) {
+                  tags = jsonArrayToList(args.getJSONArray(1));
+                } else {
+                  tags = new ArrayList<>();
+                }
 
-      if (!fields.isEmpty()) {
-        ArrayList<CustomField> mappedFields = new ArrayList();
+                if (!args.isNull(2)) {
+                  fields = jsonArrayToList(args.getJSONArray(2));
+                } else {
+                  fields = new ArrayList<>();
+                }
 
-        for (String field: fields) {
-          String[] fieldParts = field.split("\\|");
-          if (fieldParts.length == 2) {
-            Long fieldId = Long.parseLong(fieldParts[0]);
-            String fieldValue = fieldParts[1];
-            CustomField customField = new CustomField(fieldId, fieldValue);
-            mappedFields.add(customField);
-          }
+                RequestUiConfig.Builder requestActivityBuilder = RequestActivity.builder();
+
+                if (subject != null) {
+                  requestActivityBuilder = requestActivityBuilder.withRequestSubject(subject);
+                }
+
+                if (!tags.isEmpty()) {
+                  requestActivityBuilder = requestActivityBuilder.withTags(tags);
+                }
+
+                if (!fields.isEmpty()) {
+                  ArrayList<CustomField> mappedFields = new ArrayList();
+
+                  for (String field: fields) {
+                    String[] fieldParts = field.split("\\|");
+                    if (fieldParts.length == 2) {
+                      Long fieldId = Long.parseLong(fieldParts[0]);
+                      String fieldValue = fieldParts[1];
+                      CustomField customField = new CustomField(fieldId, fieldValue);
+                      mappedFields.add(customField);
+                    }
+                  }
+                  requestActivityBuilder = requestActivityBuilder.withCustomFields(mappedFields);
+                }
+                requestActivityBuilder.show(this.cordova.getActivity());
+                break;
+            case ACTION_SHOW_USER_TICKETS:
+                RequestListActivity.builder().show(this.cordova.getActivity());
+                break;
+            default:
+                callbackContext.error("Invalid action: " + action);
+                return false;
         }
-
-        requestActivityBuilder = requestActivityBuilder.withCustomFields(mappedFields);
-      }
-
-      requestActivityBuilder.show(this.cordova.getActivity());
-    } else if (ACTION_SHOW_USER_TICKETS.equals(action)) {
-      RequestListActivity.builder().show(this.cordova.getActivity());
-    } else {
-      callbackContext.error("Invalid action: " + action);
-      return false;
+        callbackContext.success();
+        return true;
     }
 
-    callbackContext.success();
-    return true;
-  }
-
-  private Context getContext() {
-    return this.cordova.getActivity().getApplicationContext();
-  }
-
-  private <T> List<T> jsonArrayToList(JSONArray jsonArray) {
-    List<T> arrayList = new ArrayList<>();
-
-    for (int i = 0; i < jsonArray.length(); i++) {
-      try {
-        arrayList.add((T)jsonArray.get(i));
-      } catch (JSONException e) {
-        e.printStackTrace();
-      }
+    private Context getContext() {
+      return this.cordova.getActivity().getApplicationContext();
     }
 
-    return arrayList;
-  }
+    private <T> List<T> jsonArrayToList(JSONArray jsonArray) {
+      List<T> arrayList = new ArrayList<>();
+
+      for (int i = 0; i < jsonArray.length(); i++) {
+        try {
+          arrayList.add((T)jsonArray.get(i));
+        } catch (JSONException e) {
+          e.printStackTrace();
+        }
+      }
+
+      return arrayList;
+    }
+
 }

@@ -21,18 +21,12 @@ Zendesk.prototype.showHelpCenterArticle = function(articleId, successCallback, e
 }
 
 Zendesk.prototype.showTicketRequest = function(subject, tags, fields, successCallback, errorCallback) {
-  exec(successCallback, errorCallback, 'Zendesk', 'showTicketRequest', [subject, tags, fields]);
+  exec(successCallback, errorCallback, PLUGIN_NAME, 'showTicketRequest', [subject, tags, fields]);
 }
 
 Zendesk.prototype.showUserTickets = function(successCallback, errorCallback) {
-  exec(successCallback, errorCallback, 'Zendesk', 'showUserTickets', []);
+  exec(successCallback, errorCallback, PLUGIN_NAME, 'showUserTickets', []);
 }
 
-if(!window.plugins)
-    window.plugins = {};
-
-if (!window.plugins.Zendesk)
-    window.plugins.Zendesk = new Zendesk();
-
 if (typeof module != 'undefined' && module.exports)
-    module.exports = Zendesk;
+    module.exports = new Zendesk();
