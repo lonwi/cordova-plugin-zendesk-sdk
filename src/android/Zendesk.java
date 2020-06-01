@@ -28,6 +28,7 @@ public class Zendesk extends CordovaPlugin {
 
     private static final String TAG = "Zendesk";
     private static final String ACTION_INITIALIZE = "initialize";
+    private static final String ACTION_SET_IDENTITY = "setIdentity";
     private static final String ACTION_SET_ANONYMOUS_IDENTITY = "setAnonymousIdentity";
     private static final String ACTION_SHOW_HELP_CENTER = "showHelpCenter";
     private static final String ACTION_SHOW_HELP_CENTER_ARTICLE = "showHelpCenterArticle";
@@ -39,13 +40,18 @@ public class Zendesk extends CordovaPlugin {
 
         switch(action) {
             case ACTION_INITIALIZE:
-                Log.d(TAG, "Starting Zendesk plugin");
                 String appId = args.getString(0);
                 String clientId = args.getString(1);
                 String zendeskUrl = args.getString(2);
 
                 zendesk.core.Zendesk.INSTANCE.init(this.getContext(), zendeskUrl, appId, clientId);
                 Support.INSTANCE.init(zendesk.core.Zendesk.INSTANCE);
+                break;
+            case ACTION_SET_IDENTITY:
+                String token = args.getString(0);
+
+                Identity identity = new JwtIdentity(token);
+                zendesk.core.Zendesk.INSTANCE.setIdentity(identity);
                 break;
             case ACTION_SET_ANONYMOUS_IDENTITY:
                 String name = args.getString(0);

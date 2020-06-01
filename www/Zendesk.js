@@ -8,6 +8,10 @@ Zendesk.prototype.initialize = function(appId, clientId, zendeskUrl, successCall
   exec(successCallback, errorCallback, PLUGIN_NAME, 'initialize', [appId, clientId, zendeskUrl]);
 }
 
+Zendesk.prototype.setIdentity = function(token, successCallback, errorCallback) {
+  exec(successCallback, errorCallback, PLUGIN_NAME, 'setIdentity', [token]);
+}
+
 Zendesk.prototype.setAnonymousIdentity = function(name, email, successCallback, errorCallback) {
   exec(successCallback, errorCallback, PLUGIN_NAME, 'setAnonymousIdentity', [name, email]);
 }

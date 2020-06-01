@@ -3,6 +3,7 @@
 @interface Zendesk : CDVPlugin
 
 - (void)initialize:(CDVInvokedUrlCommand *)command;
+- (void)setIdentity:(CDVInvokedUrlCommand *)command;
 - (void)setAnonymousIdentity:(CDVInvokedUrlCommand *)command;
 - (void)showTicketRequest:(CDVInvokedUrlCommand *)command;
 - (void)showUserTickets:(CDVInvokedUrlCommand *)command;
