@@ -16,7 +16,7 @@
   [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
 }
 
-- (void)setAnonymousIdentity:(CDVInvokedUrlCommand *)command {
+- (void)setIdentity:(CDVInvokedUrlCommand *)command {
   NSString *token = [command.arguments objectAtIndex:0];
 
   if ([token isKindOfClass:[NSNull class]]) {
