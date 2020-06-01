@@ -96,12 +96,12 @@
         NSNumber *fieldId = [numberFormatter numberFromString:fieldParts[0]];
         NSString *fieldValue = fieldParts[1];
 
-        ZDKCustomField *customField = [[ZDKCustomField alloc] initWithFieldId:fieldId andValue:fieldValue];
+        ZDKCustomField *customField = [[ZDKCustomField alloc] initWithFieldId:fieldId value:fieldValue];
         [mappedFields addObject: customField];
       }
     }
 
-    config.fields = mappedFields;
+    config.customFields = mappedFields;
   }
 
   UIViewController *ticketRequestController = [ZDKRequestUi buildRequestUiWith:@[config]];
