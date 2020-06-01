@@ -36,7 +36,7 @@
         <source url="https://cdn.cocoapods.org/"/>
       </config>
       <pods>
-        <pod name="ZendeskSDK" version="~> 4.0.0" />
+        <pod name="ZendeskSDK" version="~> 3.0.1" />
       </pods>
     </podspec>
   </platform>
