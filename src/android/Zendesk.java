@@ -13,6 +13,7 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
+import zendesk.core.JwtIdentity;
 import zendesk.core.AnonymousIdentity;
 import zendesk.core.Identity;
 import zendesk.support.CustomField;
