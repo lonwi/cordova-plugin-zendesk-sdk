@@ -58,12 +58,12 @@ public class Zendesk extends CordovaPlugin {
                 String name = args.getString(0);
                 String email = args.getString(1);
 
-                Identity identity = new AnonymousIdentity.Builder()
+                Identity anonymousIdentity = new AnonymousIdentity.Builder()
                   .withNameIdentifier(name)
                   .withEmailIdentifier(email)
                   .build();
 
-                zendesk.core.Zendesk.INSTANCE.setIdentity(identity);
+                zendesk.core.Zendesk.INSTANCE.setIdentity(anonymousIdentity);
 
                 break;
             case ACTION_SHOW_HELP_CENTER:
