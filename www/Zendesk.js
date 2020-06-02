@@ -32,5 +32,12 @@ Zendesk.prototype.showUserTickets = function(successCallback, errorCallback) {
   exec(successCallback, errorCallback, PLUGIN_NAME, 'showUserTickets', []);
 }
 
+if(!window.plugins)
+    window.plugins = {};
+
+if (!window.plugins.Zendesk)
+    window.plugins.Zendesk = new Zendesk();
+
 if (typeof module != 'undefined' && module.exports)
-    module.exports = new Zendesk();
+    module.exports = Zendesk;
+
