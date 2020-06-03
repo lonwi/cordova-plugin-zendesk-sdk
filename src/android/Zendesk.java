@@ -148,6 +148,7 @@ public class Zendesk extends CordovaPlugin {
                 callbackContext.error("Invalid action: " + action);
                 return false;
         }
+        Log.d(TAG, "callbackContext.success()");
         callbackContext.success();
         return true;
     }
