@@ -4,9 +4,6 @@ import android.content.Context;
 import android.util.Log;
 import org.apache.cordova.*;
 
-// import zendesk.core.Zendesk;
-// import zendesk.support.Support;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -18,12 +15,10 @@ import zendesk.core.AnonymousIdentity;
 import zendesk.core.Identity;
 import zendesk.support.CustomField;
 import zendesk.support.Support;
-import zendesk.core.Zendesk;
 import zendesk.support.guide.HelpCenterActivity;
 import zendesk.support.guide.ViewArticleActivity;
+import zendesk.support.request.RequestConfiguration;
 import zendesk.support.request.RequestActivity;
-import zendesk.support.request.RequestUiConfig;
-import zendesk.support.requestlist.RequestListActivity;
 import zendesk.support.requestlist.RequestListActivity;
 
 public class Zendesk extends CordovaPlugin {
@@ -85,7 +80,7 @@ public class Zendesk extends CordovaPlugin {
                   labels = new ArrayList<>();
                 }
 
-                zendesk.support.guide.HelpCenterUiConfig.Builder helpCenterActivityBuilder = HelpCenterActivity.builder();
+                zendesk.support.guide.HelpCenterConfiguration.Builder helpCenterActivityBuilder = HelpCenterActivity.builder();
 
                 if ("category".equals(groupType) && !groupIds.isEmpty()) {
                   helpCenterActivityBuilder = helpCenterActivityBuilder.withArticlesForCategoryIds(groupIds);
@@ -120,7 +115,7 @@ public class Zendesk extends CordovaPlugin {
                   fields = new ArrayList<>();
                 }
 
-                RequestUiConfig.Builder requestActivityBuilder = RequestActivity.builder();
+                RequestConfiguration.Builder requestActivityBuilder = RequestActivity.builder();
 
                 if (subject != null) {
                   requestActivityBuilder = requestActivityBuilder.withRequestSubject(subject);
