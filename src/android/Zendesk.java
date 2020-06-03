@@ -18,6 +18,7 @@ import zendesk.core.AnonymousIdentity;
 import zendesk.core.Identity;
 import zendesk.support.CustomField;
 import zendesk.support.Support;
+import zendesk.core.Zendesk;
 import zendesk.support.guide.HelpCenterActivity;
 import zendesk.support.guide.ViewArticleActivity;
 import zendesk.support.request.RequestActivity;
@@ -44,13 +45,13 @@ public class Zendesk extends CordovaPlugin {
                 String appId = args.getString(0);
                 String clientId = args.getString(1);
                 String zendeskUrl = args.getString(2);
-
+                Log.d(TAG, "ACTION_INITIALIZE: appId: "+ appId + " clientId: " + clientId + " zendeskUrl " + zendeskUrl);
                 zendesk.core.Zendesk.INSTANCE.init(this.getContext(), zendeskUrl, appId, clientId);
                 Support.INSTANCE.init(zendesk.core.Zendesk.INSTANCE);
                 break;
             case ACTION_SET_IDENTITY:
                 String token = args.getString(0);
-
+                Log.d(TAG, "ACTION_SET_IDENTITY:" + token);
                 Identity identity = new JwtIdentity(token);
                 zendesk.core.Zendesk.INSTANCE.setIdentity(identity);
                 break;
